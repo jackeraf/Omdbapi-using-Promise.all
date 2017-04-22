@@ -6,7 +6,7 @@ function findMovie(title){
 	//request devuelve una promise por eso then:
 	.then(res=>{
 		var movie= JSON.parse(res)
-		return movie
+		return [movie["Title"], movie["Year"],movie["Genre"]]
 	})
 }
 
@@ -16,10 +16,13 @@ function loadInitialData(movies){
 
 			Promise.all(movies)
 			.then((response)=>{
-				console.log(response)
-				console.log(response["Title"])
-				console.log(response["Year"])
-				console.log(response["Genre"])
+				//console.log(response)
+				response.forEach((movie)=>{
+					console.log(movie[0])
+				})
+				// console.log(response["Title"])
+				// console.log(response["Year"])
+				// console.log(response["Genre"])
 			})
 	
 	
