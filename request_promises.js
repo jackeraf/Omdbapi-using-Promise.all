@@ -1,54 +1,37 @@
 var request = require('request-promise');
 
 
-const results = [];
-
-function whileDo(condition, job) {
-	return new Promise((resolve, reject) => {
-
-		function next() {
-			if (!condition()) return resolve();
-			return job().then(next, reject);
-		};
-
-		next();
-
-	});
-};
-
-
-function findMovie(movies){
-	
-		return whileDo(
-			(i) => return i < movies.length,
-			(i) => {
-		  // tareas sincronas
-		  // results[i]
-		  	i+=1
-		  	return request(`http://www.omdbapi.com/?t=${title}`)
-		  		.then(res=>{
-		  			console.log(res)
-					var movie= JSON.parse(res)
-					return [movie["Title"], movie["Year"],movie["Genre"]]
-				})
-		  
-		}
-		);
-	
-	.catch((err)=>{
-		console.log(err)
+function findMovie(title){
+	return request(`http://www.omdbapi.com/?t=${title}`)
+	//request returns a promise, therefore then:
+	.then(res=>{
+		var movie= JSON.parse(res)
+		return [movie["Title"], movie["Year"],movie["Genre"]]
 	})
+}
+
+function loadInitialData(movies){
+
+			return Promise.all(movies)
+			.then((response)=>{
+				
+				response.forEach((movie)=>{
+					console.log(movie[1])
+				})
+			})
+	
+	
 }
 
 
 
 
-
-
 //var movies= [findMovie("jason bourne"), findMovie("The Matrix"), findMovie("titanic")]
-var movies= ["jason bourne", "The Matrix", "titanic"]
+var movies= ["jason bourne", "The Matrix", "titanic"].map(function (movie) {
+  return findMovie(movie);
+});
 
-findMovie(movies)
+loadInitialData(movies)
 
 
 
